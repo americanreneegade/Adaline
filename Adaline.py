@@ -20,7 +20,7 @@ class Adaline(object):
     """
 
     def __init__(self, eta=0.01, n_iter=50, random_state=1):
-        #eta and n_iter are hyperparameters
+        # eta and n_iter are hyperparameters
         self.eta = eta
         self.n_iter = n_iter
         self.random_state = random_state
@@ -40,7 +40,7 @@ class Adaline(object):
         self: object
         """
 
-        #initializes the weight vector with random, nonzero values
+        # initializes the weight vector with random, nonzero values
         rgen = np.random.RandomState(self.random_state)
         self.w_ = rgen.normal(loc=0.0, scale=0.01, size=1+X.shape[1])
         
@@ -48,34 +48,34 @@ class Adaline(object):
 
         for i in range(self.n_iter):
 
-            #calls function that performs dot product for X and w_
+            # calls function that performs dot product for X and w_
             net_input = self.net_input(X)
 
-            #calculates the output needed for training (using linear activation)
+            # calculates the output needed for training (using linear activation)
             output = self.activation(net_input)
 
-            #calculates error array for updating w_
+            # calculates error array for updating w_
             errors = (y - output)
 
-            #updates all weight values (with Widrow-Hoff) except bias (w_[0])
+            # updates all weight values (with Widrow-Hoff) except bias (w_[0])
             self.w_[1:] += self.eta * X.T.dot(errors)
 
-            #updates bias value
+            # updates bias value
             self.w_[0] += self.eta * errors.sum()
 
-            #calculates value of cost function for this epoch, then appends to cost_ list
+            # calculates value of cost function for this epoch, then appends to cost_ list
             cost = (errors**2).sum() / 2.0
             self.cost_.append(cost)
         return self
 
-        def net_input(self, X):
-            """Calculates input but taking dot product of X with w_"""
-            return np.dot(X, self.w_[1:]) + self.w_[0]
+    def net_input(self, X):
+        """Calculates input but taking dot product of X with w_"""
+        return np.dot(X, self.w_[1:]) + self.w_[0]
 
-        def activation(self, X):
-            """Computes linear activation"""
-            return X
-        
-        def predict(self, X):
-            """Returns class label after unit step"""
-            return np.where(self.activation(self.net_input(X)) >= 0.0, 1, -1)
+    def activation(self, X):
+        """Computes linear activation"""
+        return X
+    
+    def predict(self, X):
+        """Returns class label after unit step"""
+        return np.where(self.activation(self.net_input(X)) >= 0.0, 1, -1)
