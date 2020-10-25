@@ -20,6 +20,7 @@ class Adaline(object):
     """
 
     def __init__(self, eta=0.01, n_iter=50, random_state=1):
+        #eta and n_iter are hyperparameters
         self.eta = eta
         self.n_iter = n_iter
         self.random_state = random_state
@@ -78,5 +79,3 @@ class Adaline(object):
         def predict(self, X):
             """Returns class label after unit step"""
             return np.where(self.activation(self.net_input(X)) >= 0.0, 1, -1)
-        
-        print("Hello")
