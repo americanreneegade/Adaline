@@ -1,6 +1,8 @@
 import numpy as np
 class Adaline(object):
     """Adaline Classifier.
+    
+    Trains using batch gradient descent.
 
     Parameters
     ----------
