@@ -1,8 +1,8 @@
 import numpy as np
-class Adaline(object):
+class AdalineSGD(object):
     """Adaline Classifier.
     
-    Trains using stochastic gradient descent.
+    Trains using stochastic gradient descent. Has a few more functions than Batch GD.
 
     Parameters
     ----------
@@ -69,14 +69,25 @@ class Adaline(object):
             self._update_weights(X, y)
         return self
     
-    def shuffle(self, X, y):
+    def _shuffle(self, X, y):
         """Shuffles training data"""
         r = self.rgen.permutation(len(y))
         return X[r], y[r]
 
     def _initialize_weights(self, m):
         """Initializes weights to small random numbers"""
-        self.rgen = np.random.normal(loc=0.0, scale=0.01, size=1+m)
+        self.rgen = np.random.RandomState(self.random_state)
+        self.w_ = self.rgen.normal(loc=0.0, scale=0.01, size=1+m)
+        self.w_initialized = True
+
+    def _update_weights(self, xi, target):
+        """Apply Adaline learning rule to update weights"""
+        output = self.activation(self.net_input(xi))
+        error = (target - output)
+        self.w_[1:] += self.eta * xi.dot(error)
+        self.w_[0] += self.eta * error
+        cost = 0.5 * error**2
+        return cost
 
     def net_input(self, X):
         """Calculates input but taking dot product of X with w_"""
